@@ -6,11 +6,11 @@ public class Junction {
     private double xPos, yPos;
     private boolean isAirport;
 
-    public Junction(String name, double xPos, double yPos, boolean isAirport) {
+    public Junction(String name, double xPos, double yPos, String isAirport) {
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.isAirport = isAirport;
+        this.isAirport = isAirport.equals("AIRPORT");
     }
 
     public Junction() {
