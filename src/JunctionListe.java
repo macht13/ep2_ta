@@ -8,9 +8,10 @@ public class JunctionListe {
     }
 
     public void add(Junction junction){
-        if(this.nil.getPrev() == this.nil){
+        if (this.nil.getPrev() == this.nil) {
             this.nil.setNext(junction);
         }
+
         Junction last = this.nil.getPrev();
         this.nil.setPrev(junction);
         junction.setNext(this.nil);
