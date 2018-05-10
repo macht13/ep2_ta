@@ -18,4 +18,8 @@ public class JunctionListe {
         junction.setPrev(last);
         last.setNext(junction);
     }
+
+    public Junction getNil() {
+        return nil;
+    }
 }
