@@ -25,6 +25,7 @@ public class Junction {
         }
     }
 
+    // check if Junction is in range of (x, y)
     public boolean checkInRange(double x, double y, double radius) {
         return Math.sqrt(Math.pow(x - this.getxPos(), 2) + Math.pow(y - this.getyPos(), 2)) <= radius;
     }
