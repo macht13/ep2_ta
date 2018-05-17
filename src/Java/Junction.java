@@ -8,16 +8,16 @@ public class Junction {
     private double xPos, yPos;
     private JunctionType type;
 
-    public Junction(String name, double xPos, double yPos, String isAirport) {
+    public Junction(String name, double xPos, double yPos, String type) {
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
         // do checking of input
-        if (isAirport.equals("AIRPORT")) {
-            type = JunctionType.AIRPORT;
+        if (type.equals("AIRPORT")) {
+            this.type = JunctionType.AIRPORT;
         }
-        else if (isAirport.equals("TRAINSTATION")) {
-            type = JunctionType.TRAINSTATION;
+        else if (type.equals("TRAINSTATION")) {
+            this.type = JunctionType.TRAINSTATION;
         }
         else {
             // wrong input
@@ -25,10 +25,14 @@ public class Junction {
         }
     }
 
+    public boolean checkInRange(double x, double y, double radius) {
+        return Math.sqrt(Math.pow(x - this.getxPos(), 2) + Math.pow(y - this.getyPos(), 2)) <= radius;
+    }
+
     public Junction() {
     }
 
-    public JunctionType isAirport() {
+    public JunctionType getType() {
         return type;
     }
 
@@ -44,7 +48,7 @@ public class Junction {
         return name;
     }
 
-    public void setIsAirport(JunctionType type) {
+    public void setType(JunctionType type) {
         this.type = type;
     }
 
