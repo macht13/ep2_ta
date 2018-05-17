@@ -17,7 +17,7 @@ public class DoubleLinkedListImporter {
                     junction.setName(line[0]);
                     junction.setxPos(Double.parseDouble(line[1]));
                     junction.setyPos(Double.parseDouble(line[2]));
-                    junction.setIsAirport(line[3].equals("AIRPORT"));
+                    junction.setIsAirport(line[3].equals("AIRPORT") ? JunctionType.AIRPORT : JunctionType.TRAINSTATION);
                     if (firstEntry) {
                         junctionList.setNext(junction);
                         prev = junctionList;

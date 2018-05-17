@@ -6,20 +6,30 @@ public class Junction {
 
     private String name;
     private double xPos, yPos;
-    private boolean isAirport;
+    private JunctionType type;
 
     public Junction(String name, double xPos, double yPos, String isAirport) {
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.isAirport = isAirport.equals("AIRPORT");
+        // do checking of input
+        if (isAirport.equals("AIRPORT")) {
+            type = JunctionType.AIRPORT;
+        }
+        else if (isAirport.equals("TRAINSTATION")) {
+            type = JunctionType.TRAINSTATION;
+        }
+        else {
+            // wrong input
+            throw new IllegalArgumentException();
+        }
     }
 
     public Junction() {
     }
 
-    public boolean isAirport() {
-        return isAirport;
+    public JunctionType isAirport() {
+        return type;
     }
 
     public double getxPos() {
@@ -34,8 +44,8 @@ public class Junction {
         return name;
     }
 
-    public void setIsAirport(boolean airport) {
-        isAirport = airport;
+    public void setIsAirport(JunctionType type) {
+        this.type = type;
     }
 
     public void setName(String name) {
