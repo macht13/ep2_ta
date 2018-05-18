@@ -2,6 +2,7 @@ package Java;
 
 public class Junction {
     // doppelt verkettete Liste
+    // vielleicht allgemeiner
     private Junction next, prev;
 
     private String name;

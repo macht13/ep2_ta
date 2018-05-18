@@ -2,6 +2,7 @@ package Java;
 
 public class SimpleList implements JunctionStructure {
     private JunctionListe list;
+    private boolean empty = true;
 
     public SimpleList() {
         list = new JunctionListe();
@@ -11,7 +12,7 @@ public class SimpleList implements JunctionStructure {
     // the new element is added to the end of the list
     @Override
     public void add(Junction j) {
-
+        list.add(j);
     }
 
     // getCntInRange returns a Pair of longs

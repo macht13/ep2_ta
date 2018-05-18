@@ -6,26 +6,19 @@ import java.util.Scanner;
 
 public class DoubleLinkedListImporter {
 
-    public Junction importJunction(){
-        Junction junctionList = new Junction();
-        Junction prev = new Junction();
+    public JunctionStructure importJunctions(){
+        SimpleList junctionList = new SimpleList();
         boolean firstEntry = true;
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
                 while (s.hasNextLine()){
-                    Junction junction = new Junction();
-                    String[] line = s.nextLine().split(";");
+                    //Junction junction = new Junction();
+                    String[] line = s.nextLine().split(";");/*
                     junction.setName(line[0]);
                     junction.setxPos(Double.parseDouble(line[1]));
                     junction.setyPos(Double.parseDouble(line[2]));
-                    junction.setType(line[3].equals("AIRPORT") ? JunctionType.AIRPORT : JunctionType.TRAINSTATION);
-                    if (firstEntry) {
-                        junctionList.setNext(junction);
-                        prev = junctionList;
-                        firstEntry = false;
-                    } else {
-                        prev.setNext(junction);
-                        prev = junction;
-                    }
+                    junction.setType(line[3].equals("AIRPORT") ? JunctionType.AIRPORT : JunctionType.TRAINSTATION);*/
+                    // wäre so einfacher
+                    junctionList.add(new Junction(line[0], Double.parseDouble(line[1]), Double.parseDouble(line[2]), line[3]));
                 }
 
         } catch (FileNotFoundException e){
