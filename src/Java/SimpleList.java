@@ -21,9 +21,10 @@ public class SimpleList implements JunctionStructure {
     @Override
     public Pair getCntInRange(double x, double y, double radius) {
         long cntAirport = 0, cntTrainstation = 0;
-        for (Junction elem = list.getNil().getNext(), nil = list.getNil(); elem != nil; elem = elem.getNext()) {
-            if (elem.checkInRange(x, y, radius)) {
-                switch (elem.getType()) {
+        for (JunctionNode elem = list.getNil().getNext(), nil = list.getNil(); elem != nil; elem = elem.getNext()) {
+            Junction value = elem.getValue();
+            if (value.checkInRange(x, y, radius)) {
+                switch (value.getType()) {
                     case AIRPORT:
                         cntAirport++;
                         break;

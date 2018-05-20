@@ -1,10 +1,6 @@
 package Java;
 
 public class Junction {
-    // doppelt verkettete Liste
-    // vielleicht allgemeiner
-    private Junction next, prev;
-
     private String name;
     private double xPos, yPos;
     private JunctionType type;
@@ -66,19 +62,4 @@ public class Junction {
         this.yPos = yPos;
     }
 
-    public Junction getNext() {
-        return next;
-    }
-
-    public Junction getPrev() {
-        return prev;
-    }
-
-    public void setNext(Junction next) {
-        this.next = next;
-    }
-
-    public void setPrev(Junction prev) {
-        this.prev = prev;
-    }
 }
