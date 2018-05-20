@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class DoubleLinkedListImporter {
+public class Importer {
 
-    public JunctionStructure importJunctions(){
+    public JunctionStructure importJunctions(JunctionStructure structure){
         SimpleList junctionList = new SimpleList();
         boolean firstEntry = true;
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
