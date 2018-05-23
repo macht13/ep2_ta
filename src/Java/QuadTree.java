@@ -2,7 +2,9 @@ package Java;
 
 public class QuadTree implements JunctionStructure {
     // recursive objects
-    // maybe redo with dynamic binding
+    // either loop through the list twice --> min/max for boundaries
+    // or
+    // set boundaries to just include all elements
     private QuadTree topLeft;
     private QuadTree topRight;
     private QuadTree bottomLeft;
