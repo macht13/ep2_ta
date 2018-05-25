@@ -5,7 +5,7 @@ package Java;
  */
 public interface JunctionStructure {
     // add adds a new element to the structure
-    void add(Junction j);
+    boolean add(Junction j);
 
     // getCntInRange returns a Pair of longs
     // these store the # of trainstations/airports

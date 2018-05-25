@@ -6,24 +6,52 @@ import java.util.Scanner;
 
 public class Importer {
 
-    public JunctionStructure importJunctions(JunctionStructure structure){
-        SimpleList junctionList = new SimpleList();
+    public static SimpleList importJunctions(SimpleList structure){
         boolean firstEntry = true;
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
                 while (s.hasNextLine()){
-                    //Junction junction = new Junction();
-                    String[] line = s.nextLine().split(";");/*
-                    junction.setName(line[0]);
-                    junction.setxPos(Double.parseDouble(line[1]));
-                    junction.setyPos(Double.parseDouble(line[2]));
-                    junction.setType(line[3].equals("AIRPORT") ? JunctionType.AIRPORT : JunctionType.TRAINSTATION);*/
-                    // wäre so einfacher
-                    junctionList.add(new Junction(line[0], Double.parseDouble(line[1]), Double.parseDouble(line[2]), line[3]));
+                    String[] line = s.nextLine().split(";");
+                    structure.add(new Junction(line[0], Double.parseDouble(line[1]), Double.parseDouble(line[2]), line[3]));
                 }
 
         } catch (FileNotFoundException e){
             System.exit(1);
         }
-        return junctionList;
+        return structure;
+    }
+
+    public static QuadTree importJunctions() {
+        SimpleList structure = importJunctions(new SimpleList());
+        double x, y;
+        double hMax = 0;
+        double hMin = 0;
+        double vMax = 0;
+        double vMin = 0;
+        // get boundaries
+        for (JunctionNode j = structure.getRoot(); j != structure.getList().getNil(); j = j.getNext()) {
+            x = j.getValue().getxPos();
+            y = j.getValue().getyPos();
+            if (x > hMax) {
+                hMax = x;
+            }
+            else if (x < hMin) {
+                hMin = x;
+            }
+
+            if (y > vMax) {
+                vMax = y;
+            }
+            else if (y < vMin) {
+                vMin = y;
+            }
+        }
+
+        QuadTree q = new QuadTree(vMax, hMin, vMin, hMax);
+
+        // insert
+        for (JunctionNode j = structure.getRoot(); j != structure.getList().getNil(); j = j.getNext()) {
+            q.add(j.getValue());
+        }
+        return q;
     }
 }

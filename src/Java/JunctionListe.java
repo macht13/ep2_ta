@@ -9,7 +9,10 @@ public class JunctionListe {
         this.nil.setPrev(this.nil);
     }
 
-    public void add(Junction junction){
+    public boolean add(Junction junction){
+        if (junction == null) {
+            return false;
+        }
         if (this.nil.getPrev() == this.nil) {
             this.nil.setNext(new JunctionNode());
             this.nil.getNext().setValue(junction);
@@ -21,6 +24,8 @@ public class JunctionListe {
         this.nil.getPrev().setNext(this.nil);
         this.nil.getPrev().setPrev(last);
         last.setNext(this.nil.getPrev());
+
+        return true;
     }
 
     public JunctionNode getNil() {

@@ -1,10 +1,11 @@
 package Java;
 
+import static Java.Importer.importJunctions;
+
 public class main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        // vielleicht durch interface auf allgemeine Lösung ändern
-        Importer liste1 = new Importer();
-        JunctionStructure structure = liste1.importJunctions(new SimpleList());
+        SimpleList structure = importJunctions(new SimpleList());
+        QuadTree q = importJunctions();
+        //structure.printInRange(0, 0, 1000);
     }
 }

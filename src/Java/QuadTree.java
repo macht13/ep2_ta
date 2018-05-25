@@ -5,11 +5,10 @@ public class QuadTree implements JunctionStructure {
     // either loop through the list twice --> min/max for boundaries
     // or
     // set boundaries to just include all elements
-    private QuadTree topLeft;
-    private QuadTree topRight;
-    private QuadTree bottomLeft;
-    private QuadTree bottomRight;
+    private QuadTree[][] trees = new QuadTree[2][2];
+
     private Junction junction;
+
     private double topBoundary;
     private double leftBoundary;
     private double bottomBoundary;
@@ -17,18 +16,28 @@ public class QuadTree implements JunctionStructure {
 
     public QuadTree() {
         this.junction = null;
-        this.topLeft = null;
-        this.topRight = null;
-        this.bottomLeft = null;
-        this.bottomRight = null;
+        // topLeft
+        this.trees[0][1] = null;
+        // topRight
+        this.trees[1][1] = null;
+        // bottomLeft
+        this.trees[0][0] = null;
+        // bottomRight
+        this.trees[1][0] = null;
     }
 
     public QuadTree(double top, double left, double bot, double right) {
         this.junction = null;
-        this.topLeft = null;
-        this.topRight = null;
-        this.bottomLeft = null;
-        this.bottomRight = null;
+
+        // topLeft
+        this.trees[0][1] = null;
+        // topRight
+        this.trees[1][1] = null;
+        // bottomLeft
+        this.trees[0][0] = null;
+        // bottomRight
+        this.trees[1][0] = null;
+
         this.topBoundary = top;
         this.leftBoundary = left;
         this.bottomBoundary = bot;
@@ -38,69 +47,78 @@ public class QuadTree implements JunctionStructure {
     // add adds a new element to the structure
     // the new element is added to the correct quadrant recursively
     @Override
-    public void add(Junction j) {
+    public boolean add(Junction j) {
         if (j == null) {
-            return;
+            return false;
         }
-        // outside of Quad Boundary
-        else if (!inBoundary(j.getxPos(), j.getyPos())) {
-            return;
+        if (!inBoundary(j.getxPos(), j.getyPos())) {
+            return false;
         }
-        // cannot subdivide quad further
-        if (Math.abs(leftBoundary - rightBoundary) <= 1 && Math.abs(topBoundary - bottomBoundary) <= 1) {
-            if (this.junction == null) this.junction = j;
-            else System.out.println("Cannot add new Junction: " + j.getName() + ", duplicate coordinates");
-        }
+
         // add
-        if ((this.leftBoundary + this.rightBoundary) / 2 >= this.junction.getxPos()) {
-            // Top Left QuadTree
-            if ((this.topBoundary + this.bottomBoundary) / 2 >= this.junction.getyPos()) {
-                if (this.topLeft == null) {
-                    topLeft = new QuadTree(
-                            this.topBoundary,
-                            this.leftBoundary,
-                            (this.topBoundary + this.bottomBoundary) / 2,
-                            (this.leftBoundary + this.rightBoundary) / 2);
-                }
-                topLeft.add(j);
+        if (this.isLeaf()) {
+            // tree is empty
+            if (this.junction == null) {
+                this.junction = j;
+                return true;
             }
-            // Bottom Left QuadTree
+            // tree has value
             else {
-                if (this.bottomLeft == null) {
-                    bottomLeft = new QuadTree(
-                            (this.topBoundary + this.bottomBoundary) / 2,
-                            this.leftBoundary,
-                            this.bottomBoundary,
-                            (this.leftBoundary + this.rightBoundary) / 2);
-                }
-                bottomLeft.add(j);
-            }
-        } else {
-            // Top Right QuadTree
-            if ((this.topBoundary + this.bottomBoundary) / 2 >= this.junction.getyPos()) {
-                if (this.topRight == null) {
-                    topRight = new QuadTree(
-                            this.topBoundary,
-                            (this.leftBoundary + this.rightBoundary) / 2,
-                            (this.topBoundary + this.bottomBoundary) / 2,
-                            this.rightBoundary);
-                }
-                topRight.add(j);
-            }
-            // Bottom Right QuadTree
-            else {
-                if (this.bottomRight == null) {
-                    bottomRight = new QuadTree(
-                            (this.topBoundary + this.bottomBoundary) / 2,
-                            (this.leftBoundary + this.rightBoundary) / 2,
-                            this.bottomBoundary,
-                            this.rightBoundary);
-                }
-                bottomLeft.add(j);
+                // get old value
+                Junction oldJunction = this.junction;
+                this.junction = null;
+
+                // create new QuadTree
+                double hMid = (this.bottomBoundary + this.topBoundary) / 2;
+                double vMid = (this.leftBoundary + this.rightBoundary) / 2;
+                trees[0][1] = new QuadTree(this.topBoundary, this.leftBoundary, hMid, vMid);
+                trees[1][1] = new QuadTree(this.topBoundary, vMid, hMid, this.rightBoundary);
+                trees[0][0] = new QuadTree(hMid, this.leftBoundary, this.bottomBoundary, vMid);
+                trees[1][0] = new QuadTree(hMid, vMid, this.bottomBoundary, this.rightBoundary);
+
+                // add both Junctions
+                this.add(oldJunction);
+                this.add(j);
+
+                return true;
             }
         }
+
+        // find correct QuadTree to insert into
+        int x, y;
+        if ((this.leftBoundary + this.rightBoundary) / 2 >= j.getxPos()) {
+            // Left
+            x = 0;
+        }
+        else {
+            // Right
+            x = 1;
+        }
+
+        if ((this.topBoundary + this.bottomBoundary) / 2 >= j.getyPos()) {
+            // Bottom
+            y = 0;
+        }
+        else {
+            // Top
+            y = 1;
+        }
+
+        return trees[x][y].add(j);
     }
 
+    private boolean isLeaf() {
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 2; y++) {
+                if (trees[x][y] != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // returns true if point within QuadTrees region
     public boolean inBoundary(double x, double y) {
         return (x >= this.leftBoundary &&
                 x <= this.rightBoundary &&

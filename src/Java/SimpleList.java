@@ -11,8 +11,8 @@ public class SimpleList implements JunctionStructure {
     // add adds a new element to the structure
     // the new element is added to the end of the list
     @Override
-    public void add(Junction j) {
-        list.add(j);
+    public boolean add(Junction j) {
+        return list.add(j);
     }
 
     // getCntInRange returns a Pair of longs
@@ -42,5 +42,14 @@ public class SimpleList implements JunctionStructure {
     public void printInRange(double x, double y, double radius) {
         Pair pair = getCntInRange(x, y, radius);
         System.out.println("Airports: " + pair.first + " Trainstations: " + pair.second);
+    }
+
+    // returns the root element of the linked list
+    public JunctionNode getRoot() {
+        return list.getNil().getNext();
+    }
+
+    public JunctionListe getList() {
+        return list;
     }
 }
