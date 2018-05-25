@@ -64,47 +64,37 @@ public class QuadTree implements JunctionStructure {
             }
             // tree has value
             else {
-                // get old value
-                Junction oldJunction = this.junction;
-                this.junction = null;
-
-                // create new QuadTree
-                double hMid = (this.bottomBoundary + this.topBoundary) / 2;
-                double vMid = (this.leftBoundary + this.rightBoundary) / 2;
-                trees[0][1] = new QuadTree(this.topBoundary, this.leftBoundary, hMid, vMid);
-                trees[1][1] = new QuadTree(this.topBoundary, vMid, hMid, this.rightBoundary);
-                trees[0][0] = new QuadTree(hMid, this.leftBoundary, this.bottomBoundary, vMid);
-                trees[1][0] = new QuadTree(hMid, vMid, this.bottomBoundary, this.rightBoundary);
-
-                // add both Junctions
-                this.add(oldJunction);
-                this.add(j);
-
+                this.subdivide(j);
                 return true;
             }
         }
 
         // find correct QuadTree to insert into
-        int x, y;
+        return trees[findX(j)][findY(j)].add(j);
+    }
+
+    // findX decides whether the Junction gets added at the left or right
+    private int findX(Junction j) {
         if ((this.leftBoundary + this.rightBoundary) / 2 >= j.getxPos()) {
             // Left
-            x = 0;
+            return  0;
         }
         else {
             // Right
-            x = 1;
+            return  1;
         }
+    }
 
+    // findY decides whether the Junction gets added at the top or bottom
+    private int findY(Junction j) {
         if ((this.topBoundary + this.bottomBoundary) / 2 >= j.getyPos()) {
             // Bottom
-            y = 0;
+            return 0;
         }
         else {
             // Top
-            y = 1;
+            return 1;
         }
-
-        return trees[x][y].add(j);
     }
 
     private boolean isLeaf() {
@@ -116,6 +106,27 @@ public class QuadTree implements JunctionStructure {
             }
         }
         return true;
+    }
+
+    // subdivide takes a QuadTree with a value
+    // and creates the correctly divided Trees
+    // it adds the old/new value into the tree
+    private void subdivide(Junction j) {
+        // get old value
+        Junction oldJunction = this.junction;
+        this.junction = null;
+
+        // create new QuadTree
+        double hMid = (this.bottomBoundary + this.topBoundary) / 2;
+        double vMid = (this.leftBoundary + this.rightBoundary) / 2;
+        trees[0][1] = new QuadTree(this.topBoundary, this.leftBoundary, hMid, vMid);
+        trees[1][1] = new QuadTree(this.topBoundary, vMid, hMid, this.rightBoundary);
+        trees[0][0] = new QuadTree(hMid, this.leftBoundary, this.bottomBoundary, vMid);
+        trees[1][0] = new QuadTree(hMid, vMid, this.bottomBoundary, this.rightBoundary);
+
+        // add both Junctions
+        this.add(oldJunction);
+        this.add(j);
     }
 
     // returns true if point within QuadTrees region
