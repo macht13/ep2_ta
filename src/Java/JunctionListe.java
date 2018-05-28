@@ -2,6 +2,7 @@ package Java;
 
 public class JunctionListe implements JunctionStructure {
     private JunctionNode nil;
+    private JunctionListe airports;
     private boolean empty = true;
 
     // add adds a new element to the structure
@@ -55,6 +56,22 @@ public class JunctionListe implements JunctionStructure {
         System.out.println("Airports: " + pair.first + " Trainstations: " + pair.second);
     }
 
+    // printAirports prints the number of airports
+    // with atleast numTS amount of trainstations
+    // iterates over array of airports
+    @Override
+    public void printAirports(long numTS, double radius) {
+        long cntAirports = 0;
+        for (JunctionNode node = this.airports.getNil().getNext(); node != this.airports.getNil(); node = node.getNext()) {
+            Junction j = node.getValue();
+            Pair tmp = getCntInRange(j.getxPos(), j.getyPos(), radius);
+            if (tmp.second >= numTS) {
+                cntAirports++;
+            }
+        }
+        System.out.println(cntAirports);
+    }
+
     public JunctionListe(){
         this.nil = new JunctionNode();
         this.nil.setNext(this.nil);
@@ -67,5 +84,13 @@ public class JunctionListe implements JunctionStructure {
 
     public JunctionNode getRoot() {
         return nil.getNext();
+    }
+
+    public void addAirport(Junction airport) {
+        this.airports.add(airport);
+    }
+
+    public JunctionListe getAirports() {
+        return this.airports;
     }
 }

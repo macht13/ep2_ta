@@ -6,6 +6,7 @@ public class QuadTree implements JunctionStructure {
     // or
     // set boundaries to just include all elements
     private QuadTree[][] trees = new QuadTree[2][2];
+    private JunctionListe airports;
 
     private Junction junction;
 
@@ -42,6 +43,8 @@ public class QuadTree implements JunctionStructure {
         this.leftBoundary = left;
         this.bottomBoundary = bot;
         this.rightBoundary = right;
+
+        this.airports = new JunctionListe();
     }
 
     // add adds a new element to the structure
@@ -129,6 +132,14 @@ public class QuadTree implements JunctionStructure {
         this.add(j);
     }
 
+    public void addAirport(Junction airport) {
+        this.airports.add(airport);
+    }
+
+    public JunctionListe getAirports() {
+        return this.airports;
+    }
+
     // returns true if point within QuadTrees region
     public boolean inBoundary(double x, double y) {
         return (x >= this.leftBoundary &&
@@ -165,6 +176,22 @@ public class QuadTree implements JunctionStructure {
             }
         }
         return new Pair(cntAirport, cntTrainstation);
+    }
+
+    // printAirports prints the number of airports
+    // with atleast numTS amount of trainstations
+    // iterates over array of airports
+    @Override
+    public void printAirports(long numTS, double radius) {
+        long cntAirports = 0;
+        for (JunctionNode node = this.airports.getNil().getNext(); node != this.airports.getNil(); node = node.getNext()) {
+            Junction j = node.getValue();
+            Pair tmp = getCntInRange(j.getxPos(), j.getyPos(), radius);
+            if (tmp.second >= numTS) {
+                cntAirports++;
+            }
+        }
+        System.out.println(cntAirports);
     }
 
     // returns true if the circle (x,y) with the radius 'radius'

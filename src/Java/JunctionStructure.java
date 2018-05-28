@@ -13,4 +13,8 @@ public interface JunctionStructure {
 
     // printInRange prints the cnt obtained from getCntInRange
     void printInRange(double x, double y, double radius);
+
+    // printAirports prints the number of airports
+    // with atleast numTS amount of trainstations
+    void printAirports(long numTS, double radius);
 }

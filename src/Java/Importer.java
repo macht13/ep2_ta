@@ -4,14 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import static Java.JunctionType.AIRPORT;
+
 public class Importer {
 
     public static JunctionListe importJunctions(JunctionListe structure){
-        boolean firstEntry = true;
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
                 while (s.hasNextLine()){
                     String[] line = s.nextLine().split(";");
                     structure.add(new Junction(line[0], Double.parseDouble(line[1]), Double.parseDouble(line[2]), line[3]));
+                    if (structure.getNil().getPrev().getValue().getType() == AIRPORT) {
+                        structure.addAirport(structure.getNil().getPrev().getValue());
+                    }
                 }
 
         } catch (FileNotFoundException e){
@@ -51,6 +55,9 @@ public class Importer {
         // insert
         for (JunctionNode j = structure.getRoot(); j != structure.getNil(); j = j.getNext()) {
             q.add(j.getValue());
+            if (j.getValue().getType() == AIRPORT) {
+                q.addAirport(j.getValue());
+            }
         }
         return q;
     }
