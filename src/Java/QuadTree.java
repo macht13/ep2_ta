@@ -143,9 +143,68 @@ public class QuadTree implements JunctionStructure {
     @Override
     public Pair getCntInRange(double x, double y, double radius) {
         long cntAirport = 0, cntTrainstation = 0;
+        if (this.isLeaf()) {
+            if (this.junction != null && distance(this.junction.getxPos(), this.junction.getyPos(), x, y) <= radius) {
+                if (this.junction.getType() == JunctionType.TRAINSTATION) {
+                    cntTrainstation++;
+                } else {
+                    cntAirport++;
+                }
+            }
+            return new Pair(cntAirport, cntTrainstation);
+        }
 
-
+        Pair tmp;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (this.trees[i][j] != null && this.trees[i][j].intersectCircle(x, y, radius)) {
+                    tmp = this.trees[i][j].getCntInRange(x, y, radius);
+                    cntAirport += tmp.first;
+                    cntTrainstation += tmp.second;
+                }
+            }
+        }
         return new Pair(cntAirport, cntTrainstation);
+    }
+
+    // returns true if the circle (x,y) with the radius 'radius'
+    // intersects the QuadTrees boundaries
+    private boolean intersectCircle(double x, double y, double radius) {
+        // check if a corner is in the circle
+                // top-right
+        if (distance(x, y, rightBoundary, topBoundary) <= radius ||
+                // top-left
+                distance(x, y, leftBoundary, topBoundary) <= radius ||
+                // bottom-right
+                distance(x, y, rightBoundary, bottomBoundary) <= radius ||
+                // bottom-left
+                distance(x, y, leftBoundary, bottomBoundary) <= radius) {
+            return true;
+        }
+
+        // check if circle is inside the rectangle
+        if (x <= rightBoundary && x >= leftBoundary &&
+                y <= topBoundary && y >= bottomBoundary) {
+            return true;
+        }
+
+        // check if circle intersects edge
+        // horizontal edges
+        if (x <= rightBoundary && x >= leftBoundary &&
+                (y + radius >= bottomBoundary || y - radius <= topBoundary)) {
+            return true;
+        }
+        // vertical edges
+        if (y <= topBoundary && y >= bottomBoundary &&
+                (x + radius >= leftBoundary || x - radius <= rightBoundary)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y1 - y2, 2));
     }
 
     // printInRange prints the cnt obtained from getCntInRange
