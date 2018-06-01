@@ -27,9 +27,6 @@ public class Junction {
         return Math.sqrt(Math.pow(x - this.getxPos(), 2) + Math.pow(y - this.getyPos(), 2)) <= radius;
     }
 
-    public Junction() {
-    }
-
     public JunctionType getType() {
         return type;
     }
@@ -44,22 +41,6 @@ public class Junction {
 
     public String getName() {
         return name;
-    }
-
-    public void setType(JunctionType type) {
-        this.type = type;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setxPos(double xPos) {
-        this.xPos = xPos;
-    }
-
-    public void setyPos(double yPos) {
-        this.yPos = yPos;
     }
 
 }
