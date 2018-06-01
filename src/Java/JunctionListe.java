@@ -2,8 +2,6 @@ package Java;
 
 public class JunctionListe implements JunctionStructure {
     private JunctionNode nil;
-    private JunctionListe airports;
-    private boolean empty = true;
 
     // add adds a new element to the structure
     // the new element is added to the end of the list
@@ -62,11 +60,13 @@ public class JunctionListe implements JunctionStructure {
     @Override
     public void printAirports(long numTS, double radius) {
         long cntAirports = 0;
-        for (JunctionNode node = this.airports.getNil().getNext(); node != this.airports.getNil(); node = node.getNext()) {
+        for (JunctionNode node = this.getNil().getNext(); node != this.getNil(); node = node.getNext()) {
             Junction j = node.getValue();
-            Pair tmp = getCntInRange(j.getxPos(), j.getyPos(), radius);
-            if (tmp.second >= numTS) {
-                cntAirports++;
+            if (j.getType() == JunctionType.AIRPORT) {
+                Pair tmp = getCntInRange(j.getxPos(), j.getyPos(), radius);
+                if (tmp.second >= numTS) {
+                    cntAirports++;
+                }
             }
         }
         System.out.println(cntAirports);
@@ -84,13 +84,5 @@ public class JunctionListe implements JunctionStructure {
 
     public JunctionNode getRoot() {
         return nil.getNext();
-    }
-
-    public void addAirport(Junction airport) {
-        this.airports.add(airport);
-    }
-
-    public JunctionListe getAirports() {
-        return this.airports;
     }
 }

@@ -8,14 +8,12 @@ import static Java.JunctionType.AIRPORT;
 
 public class Importer {
 
-    public static JunctionListe importJunctions(JunctionListe structure){
+    public static JunctionListe importJunctionsToList(){
+        JunctionListe structure = new JunctionListe();
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
                 while (s.hasNextLine()){
                     String[] line = s.nextLine().split(";");
                     structure.add(new Junction(line[0], Double.parseDouble(line[1]), Double.parseDouble(line[2]), line[3]));
-                    if (structure.getNil().getPrev().getValue().getType() == AIRPORT) {
-                        structure.addAirport(structure.getNil().getPrev().getValue());
-                    }
                 }
 
         } catch (FileNotFoundException e){
@@ -24,8 +22,8 @@ public class Importer {
         return structure;
     }
 
-    public static QuadTree importJunctions() {
-        JunctionListe structure = importJunctions(new JunctionListe());
+    public static QuadTree importJunctionsToQuad() {
+        JunctionListe structure = importJunctionsToList();
         double x, y;
         double hMax = 0;
         double hMin = 0;
