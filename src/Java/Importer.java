@@ -8,6 +8,7 @@ import static Java.JunctionType.AIRPORT;
 
 public class Importer {
 
+    // imports data from csv and adds data to JunctionListe parameter
     public static JunctionListe importToList(JunctionListe structure){
         try (Scanner s = new Scanner(new File(System.getProperty("user.dir") + "/data/junctions.csv"), "UTF-8")){
                 while (s.hasNextLine()){
@@ -21,6 +22,7 @@ public class Importer {
         return structure;
     }
 
+    // adds all entries using the above function to a QuadTree
     public static QuadTree importToList(QuadTree q){
         JunctionListe structure = importToList(new JunctionListe());
         double x, y;
@@ -28,7 +30,9 @@ public class Importer {
         double hMin = 0;
         double vMax = 0;
         double vMin = 0;
-        // get boundaries
+
+        // get boundaries by iterating through each element of
+        // the temporary JunctionListe structure list
         for (JunctionNode j = structure.getRoot(); j != structure.getNil(); j = j.getNext()) {
             x = j.getValue().getxPos();
             y = j.getValue().getyPos();
@@ -49,7 +53,7 @@ public class Importer {
 
         q = new QuadTree(vMax, hMin, vMin, hMax);
 
-        // insert
+        // inserts all the elements to the QuadTree via add
         for (JunctionNode j = structure.getRoot(); j != structure.getNil(); j = j.getNext()) {
             q.add(j.getValue());
             if (j.getValue().getType() == AIRPORT) {
